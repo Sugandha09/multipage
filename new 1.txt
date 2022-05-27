@@ -1,0 +1,46 @@
+Occupation = st.selectbox( 'Which Occupation trend would you like to visualize?', data['SOC Category'].unique())
+    data.set_index('SOC Category', inplace=True)
+    data=data.T
+    fig, ax = plt.subplots() 
+    ax = sns.histplot(data.loc[['October 2015 to September 2016','October 2016 to September 2017','October 2017 to September 2018','October 2018 to September 2019','October 2019 to September 2020'], Occupation]) 
+    plt.xlabel(Occupation) 
+    plt.title("Histogram") 
+    st.pyplot(fig)
+
+
+st.subheader('Upload a Dataset')
+    uploaded_file=st.file_uploader("Browse a dataset that you'd like to visualize")
+    if uploaded_file is not None:
+        data= pd.read_csv(uploaded_file)
+        st.write(data.head())
+    else:
+        st.stop()
+
+
+st.header("4. Pie Charts")
+    chart3=st.selectbox('Select the chart type',['Basic pie Chart', 'Pie chart with a pulled pie and shadow', 'Donut Chart', 'Nested Pie Chart']) 
+    if chart3 is None:
+        st.stop()
+    else:
+        if chart3 is 'Basic pie Chart':
+        
+        d=data.groupby(['Region','Year'])['AvgTemperature'].mean()
+        a=data.Year.unique()
+        b=d.loc['Africa',:].values
+        c=d.loc['Asia',:].values
+        e=d.loc['Europe',:].values
+        f=d.loc['Middle East',:].values
+        g=d.loc['Australia/South Pacific',:].values
+        df=pd.DataFrame({'Years':a, 'Africa':b, 'Asia':c,'Europe':e,'Middle East': f,'Australia/South Pacific':g})
+        labels = 'Africa'	'Asia'	'Europe'	'Middle East'	'Australia/South Pacific'
+        sizes = [54.189360, 30, 45, 10]
+        explode = (0, 0.1, 0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
+
+        fig1, ax1 = plt.subplots()
+        ax1.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%',
+        shadow=True, startangle=90)
+        ax1.axis('equal')       
+               
+st.write('In the similar manner we can create the following multiple line plot and use grid option to show grid lines')
+    
+    
